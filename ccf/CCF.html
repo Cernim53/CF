@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Codice Fiscale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], select, input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #risultatoCodiceFiscale {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Calcolatore Codice Fiscale</h2>
+
+<form id="codiceFiscaleForm">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" required>
+    <br>
+
+    <label for="cognome">Cognome:</label>
+    <input type="text" id="cognome" required>
+    <br>
+
+    <label for="dataNascita">Data di Nascita:</label>
+    <input type="date" id="dataNascita" min="1900-01-01" max="2024-12-31" required>
+    <br>
+
+    <label for="sesso">Sesso:</label>
+    <select id="sesso" required>
+        <option value="M">Maschio</option>
+        <option value="F">Femmina</option>
+    </select>
+    <br>
+
+    <label for="comuneNascita">Comune di Nascita:</label>
+    <input type="text" id="comuneNascita" required>
+    <br>
+
+    <button type="button" onclick="calcolaCodiceFiscale()">Calcola Codice Fiscale</button>
+</form>
+
+<p id="risultatoCodiceFiscale"></p>
+
+<script>
+    function calcolaCodiceFiscale() {
+        var nome = document.getElementById('nome').value.toUpperCase();
+        var cognome = document.getElementById('cognome').value.toUpperCase();
+        var dataNascita = document.getElementById('dataNascita').value;
+        var sesso = document.getElementById('sesso').value;
+        var comuneNascita = document.getElementById('comuneNascita').value.toUpperCase();
+
+        var cf = '';
+
+        // Primi 3 caratteri del cognome
+        cf += cognome.slice(0, 3);
+
+        // Primi 3 caratteri del nome
+        cf += nome.slice(0, 3);
+
+        // Anno di nascita (ultimi 2 caratteri dell'anno)
+        cf += dataNascita.slice(2, 4);
+
+        // Mese di nascita
+        var months = 'ABCDEHLMPRST';
+        var month = parseInt(dataNascita.slice(5, 7));
+        cf += months[month - 1];
+
+        // Giorno di nascita e carattere di sesso
+        cf += dataNascita.slice(8, 10) + (sesso === 'M' ? 'M' : 'F');
+
+        // Comune di nascita (primi 3 caratteri)
+        cf += comuneNascita.slice(0, 3);
+
+        // Caratteri di controllo (semplicemente inseriamo XXX)
+        cf += 'XXX';
+
+        // Visualizzazione del Codice Fiscale
+        document.getElementById('risultatoCodiceFiscale').innerText = 'Il codice fiscale è: ' + cf;
+    }
+</script>
+
+</body>
+</html>
